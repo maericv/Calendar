@@ -3,19 +3,22 @@
 				// Months
 	            months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; 
 				// Holidays
-				holidays = [" January 1st, New Years Day<br><br> January 16th, Martin Luther King Jr. Day",
-				"February 14th, Valentine Day<br><br> February 20th, Presidents Day",
-				"March 15th, Ides of March<br><br> March 17th, St Patricks Day",
-				"April 1st, April Fools Day<br><br> April 13th, Jefferson's Birthday",
-				"May 5th, Cinco de Mayo<br><br> May 29th, Memorial Day",
-				"June 6th, D Day<br><br> June 14th, Flag Day",
-				"July 4th, Independence Day<br><br> July 22nd, Hammock Day",
-				"August 3rd, National Watermelon Day<br><br> August 14th, V-J Day",
-				"September 4th, Labor Day<br><br> September 22nd, Autummal Equinox",
-				"October 24th, United Nations Day<br><br> October 31st, Halloween",
-				"November 7th, Election Day<br><br> 4th Thursday of November, Thanksgiving",
-				"December 25th, Christmas<br><br> December 31st, New Years Eve"]
-	    function init(newWrap) { 
+
+			if (typeof(Storage) !== "undefined") {
+				localStorage.setItem("0","January 1 - New Years Day<br> January 16 - Martin Luther King Jr. Day");
+				localStorage.setItem("1","February 14 - Valentine Day<br> February 20 - Presidents Day");
+				localStorage.setItem("2","March 15 - Ides of March<br> March 17 - St Patricks Day");
+				localStorage.setItem("3","April 1 - April Fools Day<br> April 13 - Jefferson's Birthday");
+				localStorage.setItem("4","May 5 - Cinco de Mayo<br> May 29 - Memorial Day");
+				localStorage.setItem("5","June 6 - D Day<br> June 14 - Flag Day");
+				localStorage.setItem("6","July 4 - Independence Day<br> July 22 - Hammock Day");
+				localStorage.setItem("7","August 3 - National Watermelon Day<br> August 14 - V-J Day");
+				localStorage.setItem("8","September 4 - Labor Day<br> September 22 - Autummal Equinox");
+				localStorage.setItem("9","October 24 - United Nations Day<br> October 31 - Halloween");
+				localStorage.setItem("10","November 7 - Election Day<br> 4th Thursday of November, Thanksgiving");
+				localStorage.setItem("11","December 25 - Christmas<br> December 31 - New Years Eve");
+			}
+		function init(newWrap) { 
 			wrap     = $(newWrap || "#cal"); 
 			label    = wrap.find("#label"); 
 			wrap.find("#prev").bind("click.calendar", function () { switchMonth(false); }); 
@@ -64,23 +67,17 @@
  
 	        $('#label').text(calendar.label);
 	    } 
-				function addevent() {
-				
-			var HolidayDate = document.getElementById('HDate').value;
-			var HolidayName = document.getElementById('HName').value;
-			document.getElementById('eventnew').innerHTML = HolidayDate + ", " + HolidayName;
-			return HolidayDate, HolidayName;
-		}
- 
+
  
 		function showevents(month,year) {
-		
-			document.getElementById('eventarea').innerHTML = holidays[month];
-			document.getElementById('eventadd').innerHTML = "<script src='eventadd.js'></script><form> Holiday Date:<input type='text' name='HDate' id='HDate' value='July 4th'><br>Holiday Name:<input type='text' name='HName' id='HName'><br><input type='button' value='Submit' onclick='addevent();'/> </form> ";
 			
-
+			document.getElementById('eventutlities').innerHTML = "<button type='button' onclick='eventreset(" + month + ");'>Reset Current Month</button> <button type='button' onclick='eventclear(" + month + ");'>Clear Current Month</button> ";
+			document.getElementById('eventarea').innerHTML = localStorage.getItem(month);
+			document.getElementById('eventadd').innerHTML = "<form>Month: <select name='HMonth' id ='HMonth' onchange='eventdate();' required><option value='January'>January</option><option value='February'>February</option><option value='March'>March</option><option value='April'>April</option><option value='May'>May</option><option value='June'>June</option><option value='July'>July</option><option value='August'>August</option><option value='September'>September</option><option value='October'>October</option><option value='November'>November</option><option value='December'>December</option></select></form> ";	
+			
 		}
 
+			
 
 	    function createCal(year, month) { 
 		 
@@ -127,7 +124,6 @@
 			}
 			for (i = 0; i < calendar.length; i++) { 
 					calendar[i] = "<tr><td>" + calendar[i].join("</td><td>") + "</td></tr>"; 
-					//onmouseover="showevents(month,year)"
 				} 
 				calendar = $("<table>" + calendar.join("") + "</table>").addClass("curr"); 
 			 
@@ -136,8 +132,6 @@
 					$('td', calendar).filter(function () { return $(this).text() === new Date().getDate().toString(); }).addClass("today"); 
 				} 
 				createCal.cache[year][month] = { calendar : function () { return calendar.clone() }, label : months[month] + " " + year };
-			 
-				//document.getElementById('eventtitle').innerHTML = months[month] + " " + year;
 				return createCal.cache[year][month];
 	    } 
 		
